@@ -20,7 +20,12 @@ function Index(props) {
         return <h1>Loading ...</h1>;
     };
 
-    const handleChange = () => {};
+    const handleChange = (e) => {
+        setNewForm({
+            ...newForm,
+            [e.target.name]: e.target.value
+        });
+    };
     const handleSubmit = () => {};
 
     return (
