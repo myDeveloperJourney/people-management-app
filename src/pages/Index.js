@@ -26,12 +26,20 @@ function Index(props) {
             [e.target.name]: e.target.value
         });
     };
-    const handleSubmit = () => {};
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        props.createPeople(newForm); // lifting up state
+        setNewForm({
+            name: '',
+            image: '',
+            title: '',
+        });
+    };
 
     return (
         <section>
             { props.people ? loaded() : loading() }
-            <form>
+            <form onSubmit={handleSubmit}>
                 <label>Name:
                     <input 
                         type="text"
