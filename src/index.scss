@@ -49,6 +49,12 @@ body {
   }
 }
 
+.avatar-image {
+  height: 12.5rem;
+  width: 12.5rem;
+  border-radius: 50%;
+}
+
 @media (min-width: 768px) {
   .nav {
     justify-content: flex-start;

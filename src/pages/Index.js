@@ -33,6 +33,7 @@ function Index(props) {
     };
     const handleSubmit = (e) => {
         e.preventDefault();
+        if(!newForm.image) delete newForm.image
         props.createPeople(newForm); // lifting up state
         setNewForm({
             name: '',
