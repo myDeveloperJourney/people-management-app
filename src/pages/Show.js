@@ -7,11 +7,14 @@ function Show({ people, deletePeople, updatePeople }) {
     const person = people ? people.find(p => p._id === id) : null;
 
     const navigate = useNavigate();
+    
     const [editForm, setEditForm] = useState({
         name: '',
         image: '',
         title: ''
     });
+
+    const [isEditing, setIsEditing] = useState(false);
 
     const handleChange = (e) => {
         setEditForm({
@@ -25,6 +28,7 @@ function Show({ people, deletePeople, updatePeople }) {
         e.preventDefault()
         // call the updatePeople function and pass in the required values
         updatePeople(editForm, id);
+        setIsEditing(false);
     };
     
     const loading = () => {
@@ -37,6 +41,13 @@ function Show({ people, deletePeople, updatePeople }) {
             deletePeople(person._id)
             navigate('/');
         };
+
+        const handleEdit = () => {
+            setIsEditing(prevState => !prevState);
+            // functional setState update pattern
+            // it's used when we need to depend on previous to update to new state
+        };
+
         return (
             <section>
                 <h1>{person.name}</h1>
@@ -46,6 +57,7 @@ function Show({ people, deletePeople, updatePeople }) {
                     alt={person.name} 
                 />
                 <h3>{person.title}</h3>
+                <button onClick={handleEdit}>{isEditing ? 'Cancel Edit' : 'Edit'}</button>
                 <button onClick={handleDelete}>Delete</button>
             </section>
         )
@@ -60,33 +72,35 @@ function Show({ people, deletePeople, updatePeople }) {
     return (
         <section>
             {people ? loaded() : loading()}
-            <form onSubmit={handleSubmit}>
-                <label>Name:
-                    <input
-                        type="text" 
-                        name="name" 
-                        value={editForm.name}  
-                        onChange={handleChange} 
-                    />
-                </label>
-                <label>Image:
-                    <input
-                        type="text" 
-                        name="image" 
-                        value={editForm.image}  
-                        onChange={handleChange} 
-                    />
-                </label>
-                <label>Title:
-                    <input
-                        type="text" 
-                        name="title" 
-                        value={editForm.title}  
-                        onChange={handleChange} 
-                    />
-                </label>
-                <input type="submit" value="Update" />
-            </form>
+            { isEditing && 
+                <form onSubmit={handleSubmit}>
+                    <label>Name:
+                        <input
+                            type="text" 
+                            name="name" 
+                            value={editForm.name}  
+                            onChange={handleChange} 
+                        />
+                    </label>
+                    <label>Image:
+                        <input
+                            type="text" 
+                            name="image" 
+                            value={editForm.image}  
+                            onChange={handleChange} 
+                        />
+                    </label>
+                    <label>Title:
+                        <input
+                            type="text" 
+                            name="title" 
+                            value={editForm.title}  
+                            onChange={handleChange} 
+                        />
+                    </label>
+                    <input type="submit" value="Update" />
+                </form>
+            }
         </section>
     );
 }
