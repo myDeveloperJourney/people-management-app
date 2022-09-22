@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 
-function Show({ people, deletePeople }) {
+function Show({ people, deletePeople, updatePeople }) {
     const { id } = useParams();
     
     const person = people ? people.find(p => p._id === id) : null;
@@ -20,8 +20,11 @@ function Show({ people, deletePeople }) {
         });
     };
 
-    const handleSubmit = () => {
-        
+    const handleSubmit = (e) => {
+        // prevent default behavior
+        e.preventDefault()
+        // call the updatePeople function and pass in the required values
+        updatePeople(editForm, id);
     };
     
     const loading = () => {
@@ -50,7 +53,7 @@ function Show({ people, deletePeople }) {
 
     useEffect(() => {
         if(person) {
-            setEditForm(person)
+            setEditForm(person);
         }
     }, [person]);
 
