@@ -41,7 +41,7 @@ function Main(props) {
             console.log(error);
             // TODO: add some logic to alert the user,
             // that something went wrong here
-        }
+        } 
     }
 
     useEffect(() => {

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
 function Index(props) {
@@ -11,7 +12,11 @@ function Index(props) {
     const loaded = () => {
         return props.people.map(person => (
             <div className="person" key={person._id}>
-                <h1>{person.name}</h1>
+                <h2>
+                    <Link to={`/people/${person._id}`}>
+                        {person.name}
+                    </Link>
+                </h2>
             </div>
         ));
     };
