@@ -1,19 +1,35 @@
 import { useState, useEffect } from 'react';
 
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 import Index from '../pages/Index';
 import Show from '../pages/Show';
 
-function Main(props) {
+
+function PrivatePageContainer({ children, user }) {
+    return user ? children : <Navigate to="/" />
+}
+
+
+function Main({ user }) {
     
     const [ people, setPeople ] = useState(null);
 
     const API_URL = 'http://localhost:4000/api/people/';
 
     const getData = async () => {
+        
+        if(!user) return; // do not run this function unless a user is logged in
+
         try {
-            const response = await fetch(API_URL);
+
+            const token = await user.getIdToken();
+            const response = await fetch(API_URL, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            });
             const data = await response.json();
             setPeople(data);
         } catch (error) {
@@ -77,24 +93,31 @@ function Main(props) {
     }
 
     useEffect(() => {
-        getData();
-    }, []);
+        if(user) {
+            getData();
+        } else {
+            setPeople(null);
+        }
+    }, [user]);
 
     return (
         <main>
             <Routes>
                 <Route path="/" element={
                     <Index 
+                        user={user}
                         people={people} 
                         createPeople={createPeople} 
                     />
                 } />
                 <Route path="/people/:id" element={
-                    <Show 
-                        people={people}
-                        deletePeople={deletePeople}
-                        updatePeople={updatePeople} 
-                    />
+                    <PrivatePageContainer user={user}>
+                        <Show 
+                            people={people}
+                            deletePeople={deletePeople}
+                            updatePeople={updatePeople} 
+                        />
+                    </PrivatePageContainer>
                 } />
             </Routes>
         </main>

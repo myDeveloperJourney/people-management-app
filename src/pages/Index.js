@@ -3,11 +3,14 @@ import { useState } from 'react';
 
 function Index(props) {
 
+    
     const [ newForm, setNewForm ] = useState({
         name: '',
         image: '',
         title: '',
     });
+    
+    if(!props.user) return <h1>Please login to see your data</h1>;
 
     const loaded = () => {
         return props.people.map(person => (

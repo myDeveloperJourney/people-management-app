@@ -10,7 +10,13 @@ function App() {
   useEffect(() => {
     // we will set up functionality
     // to watch for logged users
-    auth.onAuthStateChanged((userObjOrNull) => setUser(userObjOrNull))
+    const unsubscribe = auth.onAuthStateChanged((userObjOrNull) => {
+      setUser(userObjOrNull);
+    });
+
+    return () => {
+      unsubscribe();
+    };
     // if a user logs in, we'll set them into state
     // if a user logs out, we'll unset them from state
   }, []);
@@ -18,7 +24,7 @@ function App() {
   return (
     <div className="App">
       <Header user={user} />
-      <Main />
+      <Main user={user} />
     </div>
   );
 }
