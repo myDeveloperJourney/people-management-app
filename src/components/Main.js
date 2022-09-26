@@ -40,11 +40,15 @@ function Main({ user }) {
     };
 
     const createPeople = async (person) => {
+        if(!user) return;
+
         try {
+            const token = await user.getIdToken();
             await fetch(API_URL, {
                 method: 'POST',
                 headers: {
-                    'Content-type': 'Application/json'
+                    'Content-type': 'Application/json',
+                    'Authorization': 'Bearer ' + token
                 },
                 body: JSON.stringify(person)
             });
