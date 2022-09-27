@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { Routes, Route, Navigate } from 'react-router-dom';
 
@@ -14,8 +14,9 @@ function PrivatePageContainer({ children, user }) {
 function Main({ user }) {
     
     const [ people, setPeople ] = useState(null);
+    const getDataRef = useRef(null);
 
-    const API_URL = 'http://localhost:4000/api/people/';
+    const API_URL = 'https://people-management-app-api.herokuapp.com/api/people/';
 
     const getData = async () => {
         
@@ -97,8 +98,12 @@ function Main({ user }) {
     }
 
     useEffect(() => {
+        getDataRef.current = getData;
+    });
+
+    useEffect(() => {
         if(user) {
-            getData();
+            getDataRef.current();
         } else {
             setPeople(null);
         }
